@@ -19,6 +19,7 @@ module.exports.index = async (req, res) => {
 module.exports.detail = async (req, res) => {
   try {
     const id = req.params.id;
+    
     const task = await Task.findOne({
       _id: id,
       deleted: false,
