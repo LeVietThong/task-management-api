@@ -1,4 +1,5 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 require("dotenv").config();
 const database = require("./config/database");
 
@@ -9,6 +10,7 @@ const port = process.env.PORT;
 
 const routesApiV1 = require("./api/v1/routes/index.route");
 
+app.use(bodyParser.json());
 
 routesApiV1(app);
 
