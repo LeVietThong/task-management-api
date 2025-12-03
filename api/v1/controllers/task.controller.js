@@ -137,19 +137,14 @@ module.exports.createPost = async (req, res) => {
     res.json({
       code: 200,
       message: "Tạo task thành công",
-      data: data
-    })
+      data: data,
+    });
   } catch (error) {
     res.json({
       code: 400,
       message: "Không tồn tại",
-    })
+    });
   }
-
-
-
-
-  
 };
 
 //[PATCH] /api/v1/tasks/edit/:id
@@ -162,6 +157,33 @@ module.exports.edit = async (req, res) => {
         _id: id,
       },
       req.body
+    );
+
+    res.json({
+      code: 200,
+      message: "Cập nhật thành công",
+    });
+  } catch (error) {
+    res.json({
+      code: 400,
+      message: "Không tồn tại",
+    });
+  }
+};
+
+//[DELETE] /api/v1/tasks/delete/:id
+module.exports.delete = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    await Task.updateOne(
+      {
+        _id: id,
+      },
+      {
+        deleted: true,
+        deletedAt: new Date(),
+      }
     );
 
     res.json({
