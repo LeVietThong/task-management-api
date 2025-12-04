@@ -108,10 +108,42 @@ module.exports.forgotPassword = async (req, res) => {
   //Gửi OTP qua mail user
   const subject = "Mã OTP lấy lại mật khẩu.";
   const html = `Mã OTP của bạn để lấy lại mật khẩu là <b>${otp}</b>`;
-  await sendEmailHelper.sendEmail(email, subject, html);
 
   res.json({
     code: 200,
     message: "Gửi mã OTP thành công",
+  });
+};
+
+//[POST] api/v1/users/password/otp
+module.exports.otpPassword = async (req, res) => {
+  const email = req.body.email;
+  const otp = req.body.otp;
+  
+  const result = await ForgotPassword.findOne({
+    email: email,
+    otp: otp,
+  });
+
+  if (!result) {
+    res.json({
+      code: 400,
+      message: "Sai OTP",
+    });
+    return;
+  }
+
+  const user = await User.findOne({
+    email: email,
+    deleted: false,
+  });
+
+  const token = user.token;
+  res.cookie("token", token);
+
+  res.json({
+    code: 200,
+    message: "Xác thực OTP thành công",
+    token: token,
   });
 };
