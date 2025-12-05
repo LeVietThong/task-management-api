@@ -191,3 +191,16 @@ module.exports.detail = async (req, res) => {
     data: req.user,
   });
 };
+
+//[GET] api/v1/users/list
+module.exports.list = async (req, res) => {
+  const users = await User.find({
+    deleted: false,
+  }).select("fullName email");
+
+  res.json({
+    code: 200,
+    message: "Thành công",
+    data: users,
+  });
+};
